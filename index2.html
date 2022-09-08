@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        var postApi = "http://localhost:3000/data"
+        fetch(postApi)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (apiData) {
+                function CourseItem({ title, image, description, reactions }) {
+                    return (
+                        <div className="article-item">
+                            <h2 className="article-title">{title}</h2>
+                            <img src={image} alt={title} />
+                            <p className="article-description">{description}</p>
+                            <p className="reaction-count">reaction-count: {reactions}</p>
+                        </div>
+                    )
+                }
+
+                function App() {
+                    return (
+                        <div id="wrapper">
+                            {apiData.map(course => (
+                                <CourseItem
+                                    key={course.id}
+                                    title={course.title}
+                                    image={course.image_url}
+                                    description={course.meta_description}
+                                    reactions={course.reactions_count}
+                                />
+                            ))}
+                        </div>
+                    )
+                }
+                ReactDOM.render(<App />, document.getElementById('root'))
+            })
+            .catch(function(err){
+                alert('Server is not working');
+            });
+    </script>
+
+
+
+</body>
+
+</html>
